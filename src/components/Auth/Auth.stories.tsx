@@ -1,9 +1,9 @@
-import { Toast } from "@shopify/polaris";
 import { withQuery } from "@storybook/addon-queryparams";
 import { Random } from "mockjs";
-import React, { ReactElement, useCallback, useState } from "react";
+import React, { ReactElement, useCallback } from "react";
 
-import { Auth } from "../..";
+import { toast } from "../../utils/toast";
+import { Auth } from "./Auth";
 
 export default {
   title: "认证",
@@ -20,26 +20,13 @@ export const RedirectToShopify = (): ReactElement => {
 };
 
 export const Callback = (): ReactElement => {
-  const [code, setCode] = useState<string>();
-  const [active, setActive] = useState(false);
-
-  const toggleActive = useCallback(() => setActive((active) => !active), []);
-
-  const callback = useCallback(
-    (value) => {
-      console.log("code:", value);
-      setCode(value);
-      toggleActive();
-    },
-    [toggleActive]
-  );
+  const callback = useCallback((value) => {
+    toast({ content: `code: ${value}` });
+  }, []);
 
   return (
     <div style={{ height: 500 }}>
       <Auth clientId="" scope={[]} callback={callback} />
-      {active ? (
-        <Toast content={`code: ${code}`} onDismiss={toggleActive} />
-      ) : null}
     </div>
   );
 };
