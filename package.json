@@ -1,0 +1,91 @@
+{
+  "name": "polaris-pro",
+  "version": "0.0.0-development",
+  "description": "",
+  "author": "Super Boost Studio",
+  "license": "MIT",
+  "repository": "superboost/polaris-pro",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.modern.module.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "microbundle --jsx React.createElement",
+    "start": "microbundle watch --jsx React.createElement",
+    "prepare": "npm run build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "react-use": "^15.3.3",
+    "styled-components": "^5.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@shopify/polaris": "^5.1.0",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-info": "^5.3.19",
+    "@storybook/addon-links": "^5.3.19",
+    "@storybook/addon-queryparams": "^5.3.19",
+    "@storybook/addons": "^5.3.19",
+    "@storybook/react": "^5.3.19",
+    "@types/mockjs": "^1.0.2",
+    "@types/node": "^14.0.27",
+    "@types/react": "^16.9.44",
+    "@types/react-dom": "^16.9.7",
+    "@types/styled-components": "^5.1.2",
+    "@typescript-eslint/eslint-plugin": "^3.7.1",
+    "@typescript-eslint/parser": "^3.7.1",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.1.0",
+    "commitizen": "^4.1.2",
+    "cross-env": "^7.0.2",
+    "cz-conventional-changelog": "^3.2.0",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-config-standard-react": "^9.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "eslint-plugin-simple-import-sort": "^5.0.3",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "microbundle": "^0.12.3",
+    "mockjs": "^1.1.0",
+    "prettier": "^2.0.4",
+    "react": "^16.13.1",
+    "react-docgen-typescript-loader": "^3.7.2",
+    "react-dom": "^16.13.1",
+    "semantic-release": "^17.1.1",
+    "ts-loader": "^8.0.1",
+    "typescript": "^3.9.7"
+  },
+  "peerDependencies": {
+    "@shopify/polaris": "^5.0.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": "eslint --ext .js,.jsx,.ts,.tsx",
+    "**/*.{js,jsx,tsx,ts,less,md,json}": "prettier --write"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
