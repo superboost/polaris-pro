@@ -18,7 +18,7 @@ export interface AuthProps {
   redirectUri?: string;
   redirectTimeout?: number;
   scope: string[];
-  callback?: (code: string) => void;
+  callback?: (code: string, shop: string) => void;
 }
 
 export const Auth: FC<AuthProps> = ({
@@ -32,10 +32,10 @@ export const Auth: FC<AuthProps> = ({
   const shop = useSearchParam("shop");
 
   useEffect(() => {
-    if (code && callback) {
-      callback(code);
+    if (code && shop && callback) {
+      callback(code, shop);
     }
-  }, [code, callback]);
+  }, [code, shop, callback]);
 
   useEffect(() => {
     if (!code && shop && re.test(shop)) {
