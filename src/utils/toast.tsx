@@ -3,7 +3,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 export function toast(props: Omit<ToastProps, "onDismiss">): void {
-  console.log(document);
   const container = document.createElement("div");
   document.body.appendChild(container);
 
