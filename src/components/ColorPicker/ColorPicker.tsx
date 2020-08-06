@@ -13,8 +13,8 @@ import styled from "styled-components";
 
 import { hexToRgb } from "../../utils";
 
-const TitleWrapper = styled.div`
-  display: flex;
+const TitleWrapper = styled.span`
+  display: inline-flex;
   align-items: center;
   text-align: left;
 `;
@@ -121,6 +121,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   return (
     <Popover
       active={active}
+      preferredAlignment="left"
       activator={
         <TitleWrapper>
           <ColorButton
