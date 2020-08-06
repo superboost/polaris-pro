@@ -16,9 +16,9 @@ export const 基本使用 = (): ReactElement => {
       <Card.Section>
         <ColorPicker onChange={(color) => toast({ content: color })} />
       </Card.Section>
-      <h3>设置名称</h3>
-      <br />
       <Card.Section>
+        <h3>设置名称</h3>
+        <br />
         <ColorPicker
           title="Button"
           onChange={(color) => toast({ content: color })}
