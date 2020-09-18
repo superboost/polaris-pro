@@ -20,11 +20,13 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "lodash": "^4.17.20",
     "react-use": "^15.3.3",
     "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@shopify/polaris": "^5.1.0",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-info": "^5.3.19",
@@ -32,6 +34,7 @@
     "@storybook/addon-queryparams": "^5.3.19",
     "@storybook/addons": "^5.3.19",
     "@storybook/react": "^5.3.19",
+    "@types/lodash": "^4.14.161",
     "@types/mockjs": "^1.0.2",
     "@types/node": "^14.0.27",
     "@types/react": "^16.9.44",
@@ -66,10 +69,10 @@
     "react-dom": "^16.13.1",
     "semantic-release": "^17.1.1",
     "ts-loader": "^8.0.2",
-    "typescript": "^3.9.7"
+    "typescript": "^4.0.2"
   },
   "peerDependencies": {
-    "@shopify/polaris": "^5.0.0",
+    "@shopify/polaris": "^5.2.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
