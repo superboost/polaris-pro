@@ -46,18 +46,17 @@ const Title = styled.span`
   padding-left: 8px;
 `;
 
-const ColorPickerWrapper = styled.div<{ allowAlpha: boolean; active: boolean }>`
+const ColorPickerWrapper = styled.div`
   position: absolute;
   z-index: 999;
   top: 25px;
-
-  display: ${(props) => !props.active && "none"};
 
   margin-bottom: 20px;
 
   padding: 8px 8px 0 8px;
 
   border-radius: 6px;
+
   background: #fff;
   box-shadow: 0 0 0 1px rgba(6, 44, 82, 0.1), 0 2px 16px rgba(33, 43, 54, 0.08);
 `;
@@ -79,13 +78,13 @@ const ColorCircle = styled.div<{ color: string }>`
 
 export interface ColorPickerProps {
   allowAlpha?: boolean;
-  color?: string;
+  defaultValue?: string;
   title?: ReactNode;
   onChange: (color: string) => void;
 }
 
 export const ColorPicker: FC<ColorPickerProps> = ({
-  color: defaultColor,
+  defaultValue,
   title,
   allowAlpha = false,
   onChange,
@@ -103,15 +102,15 @@ export const ColorPicker: FC<ColorPickerProps> = ({
 
   // 设置默认值，之后改变不触发
   useEffect(() => {
-    if (defaultColor && !triggerDefault) {
+    if (defaultValue && !triggerDefault) {
       setTriggerDefault(true);
-      setInputValue(defaultColor);
+      setInputValue(defaultValue);
       if (
         /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/.test(
-          defaultColor
+          defaultValue
         )
       ) {
-        const rgbArr = defaultColor
+        const rgbArr = defaultValue
           .replace(/[^\d*.?\d*,]/g, "")
           .split(",")
           .map((item) => Number(item));
@@ -123,14 +122,14 @@ export const ColorPicker: FC<ColorPickerProps> = ({
         });
         hsb.alpha = rgbArr[3] || 1;
         setColor(hsb);
-      } else if (/^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/.test(defaultColor)) {
+      } else if (/^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/.test(defaultValue)) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const hsb: any = rgbToHsb(hexToRgb(defaultColor));
+        const hsb: any = rgbToHsb(hexToRgb(defaultValue));
         hsb.alpha = 1;
         setColor(hsb);
       }
     }
-  }, [defaultColor, triggerDefault]);
+  }, [defaultValue, triggerDefault]);
 
   useClickAway(ref, () => {
     setActive(false);
@@ -144,67 +143,67 @@ export const ColorPicker: FC<ColorPickerProps> = ({
         onClick={() => setActive(!active)}
       />
       {title && <Title onClick={() => setActive(!active)}>{title}</Title>}
-      <ColorPickerWrapper allowAlpha={allowAlpha} active={active}>
-        <PolarisColorPicker
-          onChange={(value) => {
-            setColor(value);
-            if (allowAlpha) {
-              if (value.alpha === 1) {
+      {active && (
+        <ColorPickerWrapper>
+          <PolarisColorPicker
+            onChange={(value) => {
+              setColor(value);
+              if (allowAlpha) {
+                if (value.alpha === 1) {
+                  setInputValue(hsbToHex(value));
+                  onChange(hsbToHex(value));
+                } else {
+                  const newValue = { ...value };
+                  newValue.alpha = Number(value.alpha.toFixed(2));
+                  setInputValue(rgbString(hsbToRgb(newValue)));
+                  onChange(rgbString(hsbToRgb(newValue)));
+                }
+              } else {
                 setInputValue(hsbToHex(value));
                 onChange(hsbToHex(value));
-              } else {
-                const newValue = { ...value };
-                newValue.alpha = Number(value.alpha.toFixed(2));
-                setInputValue(rgbString(hsbToRgb(newValue)));
-                onChange(rgbString(hsbToRgb(newValue)));
-              }
-            } else {
-              const newValue = { ...value };
-              newValue.alpha = 1;
-              setInputValue(hsbToHex(newValue));
-              onChange(hsbToHex(newValue));
-            }
-          }}
-          color={color}
-          allowAlpha={allowAlpha}
-        />
-        <SettingColorWrapper>
-          <TextField
-            label=""
-            prefix={<ColorCircle color={rgbString(hsbToRgb(color))} />}
-            value={inputValue}
-            onChange={(value) => {
-              setInputValue(value);
-              onChange(value);
-              if (
-                /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/.test(
-                  value
-                )
-              ) {
-                const rgbArr = value
-                  .replace(/[^\d*.?\d*,]/g, "")
-                  .split(",")
-                  .map((item) => Number(item));
-                if (rgbArr.length > 2) {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const hsb: any = rgbToHsb({
-                    red: rgbArr[0],
-                    green: rgbArr[1],
-                    blue: rgbArr[2],
-                  });
-                  hsb.alpha = rgbArr[3] || 1;
-                  setColor(hsb);
-                }
-              } else if (/^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/.test(value)) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const hsb: any = rgbToHsb(hexToRgb(value));
-                hsb.alpha = 1;
-                setColor(hsb);
               }
             }}
+            color={color}
+            allowAlpha={allowAlpha}
           />
-        </SettingColorWrapper>
-      </ColorPickerWrapper>
+          <SettingColorWrapper>
+            <TextField
+              label=""
+              prefix={<ColorCircle color={rgbString(hsbToRgb(color))} />}
+              value={inputValue}
+              onChange={(value) => {
+                setInputValue(value);
+                onChange(value);
+                if (
+                  /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/.test(
+                    value
+                  )
+                ) {
+                  const rgbArr = value
+                    .replace(/[^\d*.?\d*,]/g, "")
+                    .split(",")
+                    .map((item) => Number(item));
+                  if (rgbArr.length > 2) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const hsb: any = rgbToHsb({
+                      red: rgbArr[0],
+                      green: rgbArr[1],
+                      blue: rgbArr[2],
+                    });
+                    hsb.alpha = rgbArr[3] || 1;
+                    setColor(hsb);
+                  }
+                } else if (/^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/.test(value)) {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const hsb: any = rgbToHsb(hexToRgb(value));
+                  hsb.alpha = 1;
+                  setColor(hsb);
+                }
+              }}
+            />
+          </SettingColorWrapper>
+        </ColorPickerWrapper>
+      )}
     </TitleWrapper>
   );
 };

@@ -13,6 +13,7 @@ export default {
 export const 基本使用 = (): ReactElement => {
   return (
     <Card>
+      注意：此组件是无状态组件
       <Card.Section>
         <ColorPicker onChange={(color) => toast({ content: color })} />
       </Card.Section>
@@ -28,7 +29,7 @@ export const 基本使用 = (): ReactElement => {
         <h3>设置默认值</h3>
         <br />
         <ColorPicker
-          color="#ccc"
+          defaultValue="#ccc"
           onChange={(color) => toast({ content: color })}
         />
       </Card.Section>
@@ -37,7 +38,7 @@ export const 基本使用 = (): ReactElement => {
         <br />
         <ColorPicker
           allowAlpha
-          color="rgba(0,0,0,0.5)"
+          defaultValue="rgba(0,0,0,0.5)"
           onChange={(color) => toast({ content: color })}
         />
       </Card.Section>
