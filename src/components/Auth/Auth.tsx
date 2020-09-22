@@ -7,10 +7,11 @@ const re = /^[0-9a-z-]+.myshopify.com$/;
 
 const AuthWrapper = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100%;
+  justify-content: center;
+
   width: 100%;
+  height: 100%;
 `;
 
 export interface AuthProps {
