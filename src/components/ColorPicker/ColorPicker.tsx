@@ -48,14 +48,16 @@ const Title = styled.span`
 
 const ColorPickerWrapper = styled.div<{ allowAlpha: boolean; active: boolean }>`
   position: absolute;
+  z-index: 999;
   top: 25px;
 
   display: ${(props) => !props.active && "none"};
 
+  margin-bottom: 20px;
+
   padding: 8px 8px 0 8px;
 
   border-radius: 6px;
-
   background: #fff;
   box-shadow: 0 0 0 1px rgba(6, 44, 82, 0.1), 0 2px 16px rgba(33, 43, 54, 0.08);
 `;
