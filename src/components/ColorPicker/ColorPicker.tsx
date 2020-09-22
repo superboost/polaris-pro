@@ -3,34 +3,36 @@ import {
   HSBAColor,
   hsbToHex,
   hsbToRgb,
-  Popover,
   rgbString,
   rgbToHsb,
   TextField,
 } from "@shopify/polaris";
-import React, { FC, ReactNode, useEffect, useState } from "react";
+import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { useClickAway } from "react-use";
 import styled from "styled-components";
 
 import { hexToRgb } from "../../utils";
 
 const TitleWrapper = styled.span`
+  position: relative;
+
   display: inline-flex;
   align-items: center;
-  text-align: left;
+
+  cursor: pointer;
 `;
 
 const ColorButton = styled.button<{ color: string }>`
-  appearance: none;
+  width: 38px;
+  height: 20px;
   margin: 0;
   padding: 0;
-  background: ${(props) => props.color};
-  border: none;
-  font-size: inherit;
-  line-height: inherit;
+
   cursor: pointer;
-  flex: 0 0 3.8rem;
-  height: 2rem;
+
+  border: none;
   border-radius: 3px;
+  background: ${(props) => props.color};
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.07),
     inset 0 1px 3px 0 rgba(0, 0, 0, 0.15);
 
@@ -41,25 +43,34 @@ const ColorButton = styled.button<{ color: string }>`
 `;
 
 const Title = styled.span`
-  margin-left: 0.8rem;
-  font-size: 1.4rem;
-  line-height: 2rem;
+  padding-left: 8px;
 `;
 
-const ColorPickerWrapper = styled.div<{ allowAlpha: boolean }>`
-  padding: 0.8rem 0.8rem 0 0.8rem;
+const ColorPickerWrapper = styled.div<{ allowAlpha: boolean; active: boolean }>`
+  position: absolute;
+  top: 25px;
+
+  display: ${(props) => !props.active && "none"};
+
+  padding: 8px 8px 0 8px;
+
+  border-radius: 6px;
+
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(6, 44, 82, 0.1), 0 2px 16px rgba(33, 43, 54, 0.08);
 `;
 
 const SettingColorWrapper = styled.div`
-  margin: 0.8rem 0;
+  margin: 8px 0;
 `;
 
 const ColorCircle = styled.div<{ color: string }>`
-  width: 2rem;
-  height: 2rem;
-  margin-left: -0.4rem;
-  background: ${(props) => props.color};
+  width: 20px;
+  height: 20px;
+  margin-left: -4px;
+
   border-radius: 50%;
+  background: ${(props) => props.color};
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.07),
     inset 0 1px 3px 0 rgba(0, 0, 0, 0.15);
 `;
@@ -77,6 +88,7 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   allowAlpha = false,
   onChange,
 }) => {
+  const ref = useRef(null);
   const [active, setActive] = useState(false);
   const [triggerDefault, setTriggerDefault] = useState(false);
   const [color, setColor] = useState<HSBAColor>({
@@ -118,23 +130,19 @@ export const ColorPicker: FC<ColorPickerProps> = ({
     }
   }, [defaultColor, triggerDefault]);
 
+  useClickAway(ref, () => {
+    setActive(false);
+  });
+
   return (
-    <Popover
-      active={active}
-      preferredAlignment="left"
-      activator={
-        <TitleWrapper>
-          <ColorButton
-            type="button"
-            color={rgbString(hsbToRgb(color))}
-            onClick={() => setActive(true)}
-          />
-          {title && <Title onClick={() => setActive(true)}>{title}</Title>}
-        </TitleWrapper>
-      }
-      onClose={() => setActive(false)}
-    >
-      <ColorPickerWrapper allowAlpha={allowAlpha}>
+    <TitleWrapper ref={ref}>
+      <ColorButton
+        type="button"
+        color={rgbString(hsbToRgb(color))}
+        onClick={() => setActive(!active)}
+      />
+      {title && <Title onClick={() => setActive(!active)}>{title}</Title>}
+      <ColorPickerWrapper allowAlpha={allowAlpha} active={active}>
         <PolarisColorPicker
           onChange={(value) => {
             setColor(value);
@@ -195,6 +203,6 @@ export const ColorPicker: FC<ColorPickerProps> = ({
           />
         </SettingColorWrapper>
       </ColorPickerWrapper>
-    </Popover>
+    </TitleWrapper>
   );
 };
