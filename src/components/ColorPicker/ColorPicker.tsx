@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ColorPicker as PolarisColorPicker,
   HSBAColor,
@@ -8,7 +9,7 @@ import {
   TextField,
 } from "@shopify/polaris";
 import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
-import { useClickAway } from "react-use";
+import { useClickAway, useWindowSize } from "react-use";
 import styled from "styled-components";
 
 import { hexToRgb } from "../../utils";
@@ -46,10 +47,10 @@ const Title = styled.span`
   padding-left: 8px;
 `;
 
-const ColorPickerWrapper = styled.div`
+const ColorPickerWrapper = styled.div<{ showTop: boolean }>`
   position: absolute;
   z-index: 999;
-  top: 25px;
+  top: ${(props) => (props.showTop ? "-225px" : "25px")};
 
   margin-bottom: 20px;
 
@@ -90,6 +91,9 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   onChange,
 }) => {
   const ref = useRef(null);
+  // 当前浏览器窗口高度
+  const { height } = useWindowSize();
+  const scrollRef = useRef<any>(null);
   const [active, setActive] = useState(false);
   const [triggerDefault, setTriggerDefault] = useState(false);
   const [color, setColor] = useState<HSBAColor>({
@@ -114,7 +118,6 @@ export const ColorPicker: FC<ColorPickerProps> = ({
           .replace(/[^\d*.?\d*,]/g, "")
           .split(",")
           .map((item) => Number(item));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const hsb: any = rgbToHsb({
           red: rgbArr[0],
           green: rgbArr[1],
@@ -123,7 +126,6 @@ export const ColorPicker: FC<ColorPickerProps> = ({
         hsb.alpha = rgbArr[3] || 1;
         setColor(hsb);
       } else if (/^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/.test(defaultValue)) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const hsb: any = rgbToHsb(hexToRgb(defaultValue));
         hsb.alpha = 1;
         setColor(hsb);
@@ -138,13 +140,20 @@ export const ColorPicker: FC<ColorPickerProps> = ({
   return (
     <TitleWrapper ref={ref}>
       <ColorButton
+        ref={scrollRef}
         type="button"
         color={rgbString(hsbToRgb(color))}
         onClick={() => setActive(!active)}
       />
       {title && <Title onClick={() => setActive(!active)}>{title}</Title>}
       {active && (
-        <ColorPickerWrapper>
+        <ColorPickerWrapper
+          // 距浏览器窗口顶部 > 225 且 距底部 < 225 才显示在上方
+          showTop={
+            scrollRef.current.getBoundingClientRect().top > 225 &&
+            height - scrollRef.current.getBoundingClientRect().bottom < 225
+          }
+        >
           <PolarisColorPicker
             onChange={(value) => {
               setColor(value);
@@ -184,7 +193,6 @@ export const ColorPicker: FC<ColorPickerProps> = ({
                     .split(",")
                     .map((item) => Number(item));
                   if (rgbArr.length > 2) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const hsb: any = rgbToHsb({
                       red: rgbArr[0],
                       green: rgbArr[1],
@@ -194,7 +202,6 @@ export const ColorPicker: FC<ColorPickerProps> = ({
                     setColor(hsb);
                   }
                 } else if (/^#([a-fA-F\d]{6}|[a-fA-F\d]{3})$/.test(value)) {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const hsb: any = rgbToHsb(hexToRgb(value));
                   hsb.alpha = 1;
                   setColor(hsb);

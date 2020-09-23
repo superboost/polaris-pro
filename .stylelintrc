@@ -7,5 +7,12 @@
   "plugins": [
     "stylelint-order"
   ],
-  "rules": {}
+  "rules": {
+    "value-keyword-case": [
+      "lower",
+      {
+        "ignoreKeywords": ["/^[A-z]/", "props"]
+      }
+    ]
+  }
 }
