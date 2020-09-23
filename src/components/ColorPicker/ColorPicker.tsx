@@ -52,8 +52,6 @@ const ColorPickerWrapper = styled.div<{ showTop: boolean }>`
   z-index: 999;
   top: ${(props) => (props.showTop ? "-225px" : "25px")};
 
-  margin-bottom: 20px;
-
   padding: 8px 8px 0 8px;
 
   border-radius: 6px;
