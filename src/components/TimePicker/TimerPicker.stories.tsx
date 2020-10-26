@@ -17,15 +17,17 @@ export const 默认值为空 = (): ReactElement => {
   return (
     <Card>
       <Card.Section>
-        <TimePicker
-          hour={hour}
-          minute={minute}
-          onChange={(value) => {
-            toast({ content: JSON.stringify(value) });
-            setHour(value.hour);
-            setMinute(value.minute);
-          }}
-        />
+        <div style={{ width: 250 }}>
+          <TimePicker
+            hour={hour}
+            minute={minute}
+            onChange={(value) => {
+              toast({ content: JSON.stringify(value) });
+              setHour(value.hour);
+              setMinute(value.minute);
+            }}
+          />
+        </div>
       </Card.Section>
     </Card>
   );
@@ -38,15 +40,17 @@ export const 有默认值 = (): ReactElement => {
   return (
     <Card>
       <Card.Section>
-        <TimePicker
-          hour={hour}
-          minute={minute}
-          onChange={(value) => {
-            toast({ content: JSON.stringify(value) });
-            setHour(value.hour);
-            setMinute(value.minute);
-          }}
-        />
+        <div style={{ width: 250 }}>
+          <TimePicker
+            hour={hour}
+            minute={minute}
+            onChange={(value) => {
+              toast({ content: JSON.stringify(value) });
+              setHour(value.hour);
+              setMinute(value.minute);
+            }}
+          />
+        </div>
       </Card.Section>
     </Card>
   );

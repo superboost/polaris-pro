@@ -1,6 +1,13 @@
 import { AppProvider, Frame, Toast, ToastProps } from "@shopify/polaris";
 import React, { FC, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import styled from "styled-components";
+
+const FrameWrapper = styled.div`
+  .Polaris-Frame {
+    min-height: initial;
+  }
+`;
 
 const CustomToast: FC<ToastProps> = ({ onDismiss, ...rest }) => {
   const [active, setActive] = useState(false);
@@ -9,24 +16,25 @@ const CustomToast: FC<ToastProps> = ({ onDismiss, ...rest }) => {
 
   return (
     <AppProvider i18n={{}}>
-      <Frame>
-        {active ? (
-          <Toast
-            {...rest}
-            onDismiss={() => {
-              setActive(false);
-              setTimeout(onDismiss, 1000);
-            }}
-          />
-        ) : null}
-      </Frame>
+      <FrameWrapper>
+        <Frame>
+          {active ? (
+            <Toast
+              {...rest}
+              onDismiss={() => {
+                setActive(false);
+                setTimeout(onDismiss, 1000);
+              }}
+            />
+          ) : null}
+        </Frame>
+      </FrameWrapper>
     </AppProvider>
   );
 };
 
 export function toast(props: Omit<ToastProps, "onDismiss">): void {
   const container = document.createElement("div");
-  container.style.display = "none";
   document.body.appendChild(container);
 
   ReactDOM.render(

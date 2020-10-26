@@ -4,7 +4,7 @@ import {
   Popover,
   TextField,
 } from "@shopify/polaris";
-import { CalendarMajorMonotone } from "@shopify/polaris-icons";
+import { CalendarMajor } from "@shopify/polaris-icons";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -99,13 +99,13 @@ export const DatePicker: FC<DatePickerProps> = ({
       {label && <Label>{label}</Label>}
       <Popover
         active={popoverActive}
-        fluidContent
+        // fluidContent
         activator={
           <TextField
             value={inputValue}
             type="text"
             autoComplete={false}
-            prefix={<Icon source={CalendarMajorMonotone} />}
+            prefix={<Icon source={CalendarMajor} />}
             onChange={(val) => {
               // 只能输入数字和 -
               setInputValue(val.replace(/[^\d|-]+/g, ""));
